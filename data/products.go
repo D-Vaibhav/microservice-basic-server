@@ -1,6 +1,10 @@
 package data
 
-import "time"
+import (
+	"encoding/json"
+	"io"
+	"time"
+)
 
 type Product struct {
 	ID          int     `json:"id"`
@@ -13,8 +17,15 @@ type Product struct {
 	DeletedOn   string  `json:"-"`
 }
 
+type Products []*Product
+
+func (p *Products) ToJSON(w io.Writer) error {
+	encoder := json.NewEncoder(w)
+	return encoder.Encode(p)
+}
+
 // we'll using this function to get all of the products
-func GetProducts() []*Product {
+func GetProducts() Products {
 	return productList
 }
 
